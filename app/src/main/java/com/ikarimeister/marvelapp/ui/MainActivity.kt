@@ -22,14 +22,23 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.ikarimeister.marvelapp.R
 import com.ikarimeister.marvelapp.domain.model.Hero
 import com.ikarimeister.marvelapp.ui.theme.CellButton
 import com.ikarimeister.marvelapp.ui.theme.MarvelAppTheme
 import com.ikarimeister.marvelapp.ui.viewmodel.HeroListViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import androidx.lifecycle.viewmodel.compose.viewModel
 
+@AndroidEntryPoint
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
 
@@ -81,6 +90,20 @@ class MainActivity : ComponentActivity() {
                     subtitle = item.takeIf { it.isAvenger }?.let { "Avenger" } ?: "Not Avenger",
                     topDividerVisible = index != 0,
                     bottomDividerVisible = false,
+                    leadingIcon = {
+                        item.photo?.let {
+                            AsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(it)
+                                    .crossfade(true)
+                                    .build(),
+                                placeholder = painterResource(R.drawable.ic_launcher_foreground),
+                                contentScale = ContentScale.Crop,
+                                contentDescription = item.name
+
+                            )
+                        }
+                    },
                     onClick = {}
                 )
             }

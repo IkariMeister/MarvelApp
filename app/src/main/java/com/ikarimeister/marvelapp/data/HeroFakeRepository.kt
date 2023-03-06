@@ -19,7 +19,7 @@ class HeroFakeRepository @Inject constructor(): Repository<Hero,String> {
     }
 
     override suspend fun getAll(): List<Hero> {
-        delay(15000L)
+        delay(1500L)
         return data.values.toList()
     }
 
